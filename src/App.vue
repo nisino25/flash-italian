@@ -127,11 +127,16 @@
           >
             <i :class="currentWord.marked ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i>
           </button>
+
+          <button class="btn btn-info me-2" @click="speakWord(currentWord)">
+              <i class="fa-solid fa-volume-high"></i>
+          </button>
+
   
           <button v-if="currentWordIndex !== shuffledWords.length -1" class="btn btn-success me-2" @click="nextWord">
             <i class="fa-solid fa-right-long"></i>
           </button>
-         <button v-else class="btn btn-danger me-2" @click="finishRound">Finish</button>
+         <button v-else class="btn btn-danger" @click="finishRound">Done</button>
           
         </div>
       </template>
@@ -541,6 +546,15 @@ export default {
       this.currentWordIndex = 0;
       this.showTranslation = false;
       this.shuffledWords = [];
+    },
+    speakWord(word) {
+        if (!word.it) return;
+
+        const utterance = new SpeechSynthesisUtterance(word.it);
+        utterance.lang = "it-IT"; // Set language to Italian
+        utterance.rate = 0.9; // Adjust speed if needed
+        utterance.pitch = 1; // Adjust pitch if needed
+        speechSynthesis.speak(utterance);
     },
   },
   mounted() {
