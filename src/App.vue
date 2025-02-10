@@ -241,6 +241,9 @@ export default {
   },
   methods: {
     fetchData() {
+        console.log(`getting reload`);
+        // this.groups = [];
+
         const url = `${this.baseUrl}?callback=jsonpCallback&action=fetchData`;
         console.log(url);
 
@@ -307,6 +310,7 @@ export default {
         if (group.name) groups.push(group);
         if (unchecked.words.length > 0) groups.push(unchecked); // Add "unchecked" group if it has words
 
+        this.groups = null;
         this.groups = groups;
         console.log("Processed Data:", this.groups); // Debugging
     },
@@ -398,7 +402,7 @@ export default {
       // Build the API URL with the action parameter for toggleMark
       const url = `${this.baseUrl}?callback=jsonpCallback&action=toggleCol&targetCol=5&english=${encodeURIComponent(
         word.en
-      )}&italian=${encodeURIComponent(word.in)}`;
+      )}&italian=${encodeURIComponent(word.it)}`;
 
       console.log(url)
 
@@ -413,8 +417,7 @@ export default {
       script.src = url; // Set the API URL
       script.async = true; // Load asynchronously
       document.body.appendChild(script);
-      
-      console.log('done')
+
       // Clean up the <script> tag after the request
       script.onload = () => {
         document.body.removeChild(script); // Remove the script tag
@@ -546,6 +549,8 @@ export default {
       this.currentWordIndex = 0;
       this.showTranslation = false;
       this.shuffledWords = [];
+
+      this.fetchData();
     },
     speakWord(word) {
         if (!word.it) return;
