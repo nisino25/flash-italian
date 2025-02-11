@@ -52,18 +52,26 @@
     <!-- group looping -->
     <div v-if="groups.length > 0 && !flashcardMode" class="row gx-2 gy-2 mb-3">
       <div
-        v-for="(group, index) in groups"
+        v-for="(group, index) in computedGroups"
         :key="index"
         class="col-6"
       >
-        <div :style="{ backgroundColor: group.name === 'unchecked' ? 'LightSlateGray' : '' }" class="card shadow" @click="startFlashcards(group)" style="cursor: pointer;">
+        <div 
+          :style="{
+              backgroundColor: group.name === 'unchecked' ? 'LightSlateGray' : '',
+              opacity: group.counter === 0 ? 0.5 : 1
+          }"
+          class="card shadow" 
+          @click="startFlashcards(group)" 
+          style="cursor: pointer;"
+        >
           <div class="card-body">
             <h5 class="card-title text-center">{{ group.name }}</h5>
             <hr>
             <section class="flex-container" style="width: 80%; margin: auto;">
               <small><i class="fa-solid fa-list"></i> <strong>{{ group.words.length }}</strong></small>
-              <small v-if="group.name !== 'unchecked'"><i class="fa-solid fa-bookmark"></i> <strong>{{ group.words.filter(word => word.marked)?.length }}</strong></small>
-              <small v-if="group.name !== 'unchecked'"><i class="fa-regular fa-clock"></i> <strong>{{ group.counter }}</strong></small>
+              <small v-if="group.name !== 'unchecked'  && group.name !== 'Marked Words'"><i class="fa-solid fa-bookmark"></i> <strong>{{ group.words.filter(word => word.marked)?.length }}</strong></small>
+              <small v-if="group.name !== 'unchecked' && group.name !== 'Marked Words'"><i class="fa-regular fa-clock"></i> <strong>{{ group.counter }}</strong></small>
             </section>
           </div>
         </div>
@@ -78,7 +86,12 @@
     <!-- Flashcard View -->
     <div v-if="flashcardMode" class="flashcard text-center p-4 shadow bg-light rounded">
       <div class="flex-container">
-        <span class="badge bg-warning text-dark p-2">
+        <span 
+          class="badge text-dark p-2"
+          :style="{
+            backgroundColor: `rgba(255, 193, 7, ${Math.min(1, currentWord.counter / 25)})`
+          }"
+        >
           <i class="fa-solid fa-flag"></i> x {{ currentWord.counter }}
         </span>
         <h4 class="mb-4 text-primary">
@@ -232,6 +245,23 @@ export default {
         };
       }).filter(group => group.words.length > 0); // Remove groups with no marked words
     },
+
+    filteredWords() {
+      return this.groups.flatMap(group => group.words).filter(word => word.marked);
+    },
+
+    computedGroups() {
+      const markedWordsOnly = {
+        name: "Marked Words",
+        words: this.filteredWords,
+        counter: '?', // No counter needed
+      };
+      
+
+      return [markedWordsOnly, ...this.groups]; // Add to the start of groups
+    },
+    
+
     japaneseEmoji() {
       return twemoji.parse("🇯🇵"); // Japan flag emoji
     },
@@ -313,6 +343,8 @@ export default {
         this.groups = null;
         this.groups = groups;
         console.log("Processed Data:", this.groups); // Debugging
+        console.log('------------');
+        console.log(this.computedGroups)
     },
     shuffleArray(array) {
       // const shuffled = [...array];
