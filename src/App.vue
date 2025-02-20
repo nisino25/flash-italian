@@ -109,8 +109,11 @@
           <div class="h5 mb-4">
             {{ flashcardModeSetting === 'english' ? (showTranslation ? currentWord.en : '???') : currentWord.en }}
           </div>
-          <div class="h6 mb-4 text-secondary" v-if="currentWord.example">
-            {{currentWord.example}}
+          <div class="h6 mb-4 text-secondary" v-if="currentWord.exampleSetence">
+            {{currentWord.exampleSetence}}
+          </div>
+          <div class="h6 mb-4 text-secondary">
+            {{ flashcardModeSetting === 'english' ? (showTranslation ? currentWord.exampleSetenceEn : '???') : currentWord.exampleSetenceEn }}
           </div>
         </div>
   
@@ -226,7 +229,7 @@ export default {
       isFirstRound: false,
       hasEdited: false,
 
-      baseUrl : 'https://script.google.com/macros/s/AKfycbwIV89A-QgSsvLhrBNMBNlaSET-MlGDm_Mgfy602d1-g8NaA2Lih_62PrzpBatgE94Tug/exec'
+      baseUrl : 'https://script.google.com/macros/s/AKfycbyYfK6q4eGxfeA7Nm818UI2rXbyg2wC13Jcpsoxi-0tqYv_h27EwPUfBF7K5bipJBMzkw/exec'
     };
   },
   computed: {
@@ -272,7 +275,7 @@ export default {
   methods: {
     fetchData() {
         console.log(`getting reload`);
-        // this.groups = [];
+        this.groups = [];
 
         const url = `${this.baseUrl}?callback=jsonpCallback&action=fetchData`;
         console.log(url);
@@ -311,10 +314,14 @@ export default {
                     en: row.en,
                     marked: row.marked == 1,  // Ensure boolean conversion
                     counter: row.counter ? Number(row.counter) : 0,
-                    example: row["Example setences"] || "",
+                    exampleSetence: row.exampleSetence || "",
+                    exampleSetenceEn: row.exampleSetenceEn || "",
+                    audioPath: row.audioPath,
 
                     updatedIt: row.it,
                     updatedEn: row.en,
+
+                    
                 });
             }
         };
@@ -585,13 +592,18 @@ export default {
       this.fetchData();
     },
     speakWord(word) {
-        if (!word.it) return;
+        // if (!word.it) return;
 
-        const utterance = new SpeechSynthesisUtterance(word.it);
-        utterance.lang = "it-IT"; // Set language to Italian
-        utterance.rate = 0.9; // Adjust speed if needed
-        utterance.pitch = 1; // Adjust pitch if needed
-        speechSynthesis.speak(utterance);
+        // const utterance = new SpeechSynthesisUtterance(word.it);
+        // utterance.lang = "it-IT"; // Set language to Italian
+        // utterance.rate = 0.9; // Adjust speed if needed
+        // utterance.pitch = 1; // Adjust pitch if needed
+        // speechSynthesis.speak(utterance);
+
+        if (!word.audioPath) return;
+
+        const audio = new Audio(word.audioPath);
+        audio.play();
     },
   },
   mounted() {
