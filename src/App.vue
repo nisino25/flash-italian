@@ -112,7 +112,7 @@
           <div class="h6 mb-4 text-secondary" v-if="currentWord.exampleSetence">
             {{currentWord.exampleSetence}}
           </div>
-          <div class="h6 mb-4 text-secondary">
+          <div class="h6 mb-4 text-secondary" v-if="currentWord.exampleSetenceEn">
             {{ flashcardModeSetting === 'english' ? (showTranslation ? currentWord.exampleSetenceEn : '???') : currentWord.exampleSetenceEn }}
           </div>
         </div>
@@ -314,8 +314,8 @@ export default {
                     en: row.en,
                     marked: row.marked == 1,  // Ensure boolean conversion
                     counter: row.counter ? Number(row.counter) : 0,
-                    exampleSetence: row.exampleSetence || "",
-                    exampleSetenceEn: row.exampleSetenceEn || "",
+                    exampleSetence: row.exampleSetence || false,
+                    exampleSetenceEn: row.exampleSetenceEn || false,
                     audioPath: row.audioPath,
 
                     updatedIt: row.it,
