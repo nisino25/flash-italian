@@ -229,7 +229,7 @@ export default {
       isFirstRound: false,
       hasEdited: false,
 
-      baseUrl : 'https://script.google.com/macros/s/AKfycbyYfK6q4eGxfeA7Nm818UI2rXbyg2wC13Jcpsoxi-0tqYv_h27EwPUfBF7K5bipJBMzkw/exec'
+      baseUrl : 'https://script.google.com/macros/s/AKfycbzFbw5BxXC51tZZTz4QWekcSWIfx0eidErj8JviL_KWKf5bJdOyaPtP6CxJeWC_Y_GgrQ/exec'
     };
   },
   computed: {
@@ -435,8 +435,10 @@ export default {
     },
 
     toggleMark(word) {
-      word.marked = !word.marked;
-      if (word.marked) this.toggleFlag(word)
+      let checkFlag = word.flag
+      word.flag = true;
+      word.marked = true;
+      if (!checkFlag) this.toggleFlag(word)
 
       // Build the API URL with the action parameter for toggleMark
       const url = `${this.baseUrl}?callback=jsonpCallback&action=toggleCol&targetCol=5&english=${encodeURIComponent(
@@ -565,6 +567,9 @@ export default {
       word.counter++
       // Build the API URL with the action parameter for increment
       const url = `${this.baseUrl}?callback=jsonpCallback&action=increment&english=${encodeURIComponent(word.en)}&italian=${encodeURIComponent(word.it)}`;
+      console.log('-------- in crementing word');
+      console.log(url);
+      console.log('-------');
 
       // Define the callback function globally
       window.jsonpCallback = (data) => {
