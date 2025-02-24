@@ -255,7 +255,7 @@ export default {
 
     computedGroups() {
       const markedWordsOnly = {
-        name: "Marked Words",
+        name: "Marked Only",
         words: this.filteredWords,
         counter: '?', // No counter needed
       };
@@ -436,8 +436,8 @@ export default {
 
     toggleMark(word) {
       let checkFlag = word.flag
-      word.flag = true;
-      word.marked = true;
+      // word.flag = !word.flag;
+      word.marked = !word.marked;
       if (!checkFlag) this.toggleFlag(word)
 
       // Build the API URL with the action parameter for toggleMark
