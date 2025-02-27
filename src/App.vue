@@ -79,8 +79,11 @@
     </div>
 
 
-    <div v-if="groups?.length == 0" class="text-center">
-      <p class="text-muted">Loading data now!</p>
+    <div v-if="groups?.length == 0" class="text-center fixed left-1/2 top-1/4 transform -translate-x-1/2 -translate-y-1/2">
+      <div class="relative w-[22.5vw] aspect-square m-8">
+          <div class="absolute w-[80%] h-[80%] border-4 border-indigo-300 rounded-full animate-[ripple_1.5s_infinite] left-1/2 top-1/2 text-center fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-[80%] h-[80%] border-4 border-indigo-300 rounded-full animate-[ripple_1.5s_infinite] [animation-delay:0.5s] left-1/2 top-1/2 text-center fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
     </div>
 
     <!-- Flashcard View -->
@@ -696,5 +699,17 @@ export default {
 
 .flashcard{
   border: 1px solid lightslategray;
+}
+
+
+@keyframes ripple {
+    from {
+        transform: translate(-50%,-50%) scale(0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%,-50%) scale(1.5);
+        opacity: 0;
+    }
 }
 </style>
