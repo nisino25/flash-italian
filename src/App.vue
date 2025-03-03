@@ -87,7 +87,7 @@
     </div>
 
     <!-- Flashcard View -->
-    <div v-if="flashcardMode" class="flashcard text-center p-4 shadow bg-light rounded">
+    <div v-if="flashcardMode" class="flashcard text-center p-4 shadow bg-light rωounded">
       <div class="flex-container">
         <span 
           class="badge text-dark p-2"
@@ -256,15 +256,26 @@ export default {
       return this.groups.flatMap(group => group.words).filter(word => word.marked);
     },
 
+    mistakesInThePast() {
+      return this.groups.flatMap(group => group.words).filter(word => word.counter !== 0 );
+    },
+
     computedGroups() {
       const markedWordsOnly = {
         name: "Marked Only",
         words: this.filteredWords,
         counter: '?', // No counter needed
       };
+
+
+      const mistakesWordsOnly = {
+        name: "Mistakes Only",
+        words: this.mistakesInThePast,
+        counter: '?', // No counter needed
+      };
       
 
-      return [markedWordsOnly, ...this.groups]; // Add to the start of groups
+      return [mistakesWordsOnly,markedWordsOnly, ...this.groups]; // Add to the start of groups
     },
     
 
